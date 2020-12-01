@@ -26,8 +26,8 @@ func Include(haystack []int, needle int) bool {
 	return Index(haystack, needle) >= 0
 }
 
-func main() {
-	file, err := os.Open("./input.txt")
+func ScanFileToIntSlice(filename string) []int {
+        file, err := os.Open(filename)
 	check(err)
 	defer file.Close()
 
@@ -39,6 +39,12 @@ func main() {
 		check(err)
 		lines = append(lines, i)
 	}
+        
+        return lines
+}
+
+func main() {
+        lines := ScanFileToIntSlice("./input.txt")
 
 	for _, v := range lines {
 		diff := 2020 - v
