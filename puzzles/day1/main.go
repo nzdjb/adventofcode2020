@@ -43,6 +43,16 @@ func ScanFileToIntSlice(filename string) []int {
         return lines
 }
 
+func OutputResult(nums ...int) {
+	sum := 0
+	product := 1
+	for _, num := range nums {
+		sum += num
+		product *= num
+	}
+	fmt.Printf("%v: sum: %v product: %v \n", nums, sum, product) 
+}
+
 func main() {
         lines := ScanFileToIntSlice("./input.txt")
 
@@ -50,8 +60,7 @@ func main() {
 		diff := 2020 - v
 		match := Include(lines, diff)
 		if match {
-			product := v * diff
-			fmt.Printf("%v: 2020 - %v = %v, match = %t, product = %v \n", v, v, diff, match, product)
+			OutputResult(v, diff)
 			return
 		}
 	}
