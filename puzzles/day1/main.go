@@ -53,15 +53,33 @@ func OutputResult(nums ...int) {
 	fmt.Printf("%v: sum: %v product: %v \n", nums, sum, product) 
 }
 
+func FindTwo(lines []int) {
+        for _, v := range lines {
+                diff := 2020 - v
+                match := Include(lines, diff)
+                if match {
+                        OutputResult(v, diff)
+                        return
+                }
+        }
+}
+
+func FindThree(lines []int) {
+        for _, i := range lines {
+                for _, j := range lines {
+                        diff := 2020 - i - j
+                        match := Include(lines, diff)
+                        if match {
+                                OutputResult(i, j, diff)
+                                return
+                        }
+                }
+        }
+}
+
 func main() {
         lines := ScanFileToIntSlice("./input.txt")
 
-	for _, v := range lines {
-		diff := 2020 - v
-		match := Include(lines, diff)
-		if match {
-			OutputResult(v, diff)
-			return
-		}
-	}
+	FindTwo(lines)
+	FindThree(lines)
 }
