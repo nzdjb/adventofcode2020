@@ -5,30 +5,12 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"github.com/nzdjb/adventofcode2020/util"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func Index(haystack []int, needle int) int {
-	for i, v := range haystack {
-		if v == needle {
-			return i
-		}
-	}
-	return -1
-}
-
-func Include(haystack []int, needle int) bool {
-	return Index(haystack, needle) >= 0
-}
-
 func ScanFileToIntSlice(filename string) []int {
-        file, err := os.Open(filename)
-	check(err)
+  file, err := os.Open(filename)
+	util.Check(err)
 	defer file.Close()
 
 	var lines []int
@@ -36,11 +18,11 @@ func ScanFileToIntSlice(filename string) []int {
 	for scanner.Scan() {
 		entry := scanner.Text()
 		i, err := strconv.Atoi(entry)
-		check(err)
+		util.Check(err)
 		lines = append(lines, i)
 	}
         
-        return lines
+  return lines
 }
 
 func OutputResult(nums ...int) {
@@ -54,31 +36,31 @@ func OutputResult(nums ...int) {
 }
 
 func FindTwo(lines []int) {
-        for _, v := range lines {
-                diff := 2020 - v
-                match := Include(lines, diff)
-                if match {
-                        OutputResult(v, diff)
-                        return
-                }
-        }
+  for _, v := range lines {
+    diff := 2020 - v
+    match := util.Include(lines, diff)
+    if match {
+      OutputResult(v, diff)
+      return
+    }
+  }
 }
 
 func FindThree(lines []int) {
-        for _, i := range lines {
-                for _, j := range lines {
-                        diff := 2020 - i - j
-                        match := Include(lines, diff)
-                        if match {
-                                OutputResult(i, j, diff)
-                                return
-                        }
-                }
-        }
+  for _, i := range lines {
+    for _, j := range lines {
+      diff := 2020 - i - j
+      match := util.Include(lines, diff)
+      if match {
+        OutputResult(i, j, diff)
+        return
+      }
+    }
+  }
 }
 
 func main() {
-        lines := ScanFileToIntSlice("./input.txt")
+  lines := ScanFileToIntSlice("./input.txt")
 
 	FindTwo(lines)
 	FindThree(lines)
