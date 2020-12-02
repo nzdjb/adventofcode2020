@@ -8,7 +8,7 @@ import (
 	"github.com/nzdjb/adventofcode2020/util"
 )
 
-func ScanFileToIntSlice(filename string) []int {
+func scanFileToIntSlice(filename string) []int {
   file, err := os.Open(filename)
 	util.Check(err)
 	defer file.Close()
@@ -25,7 +25,7 @@ func ScanFileToIntSlice(filename string) []int {
   return lines
 }
 
-func OutputResult(nums ...int) {
+func outputResult(nums ...int) {
 	sum := 0
 	product := 1
 	for _, num := range nums {
@@ -35,24 +35,24 @@ func OutputResult(nums ...int) {
 	fmt.Printf("%v: sum: %v product: %v \n", nums, sum, product) 
 }
 
-func FindTwo(lines []int) {
+func findTwo(lines []int) {
   for _, v := range lines {
     diff := 2020 - v
     match := util.Include(lines, diff)
     if match {
-      OutputResult(v, diff)
+      outputResult(v, diff)
       return
     }
   }
 }
 
-func FindThree(lines []int) {
+func findThree(lines []int) {
   for _, i := range lines {
     for _, j := range lines {
       diff := 2020 - i - j
       match := util.Include(lines, diff)
       if match {
-        OutputResult(i, j, diff)
+        outputResult(i, j, diff)
         return
       }
     }
@@ -60,8 +60,8 @@ func FindThree(lines []int) {
 }
 
 func main() {
-  lines := ScanFileToIntSlice("./input.txt")
+  lines := scanFileToIntSlice("./input.txt")
 
-	FindTwo(lines)
-	FindThree(lines)
+	findTwo(lines)
+	findThree(lines)
 }
