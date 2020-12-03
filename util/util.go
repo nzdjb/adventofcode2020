@@ -1,8 +1,8 @@
 package util
 
 import (
-	"os"
 	"bufio"
+	"os"
 )
 
 // Check Panic if errror.
@@ -23,6 +23,6 @@ func ScanFileToStringSlice(filename string) []string {
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
-        
-  return lines
+
+	return lines
 }
