@@ -62,41 +62,32 @@ func part1(program []instruction) {
 
 func part2(program []instruction) int {
 	for ind, ins := range program {
-		val := func() int {
-			defer func() {
-				if r := recover(); r != nil {
-					fmt.Println("Part2:", r)
-				}
-			}()
-			mutated := make([]instruction, len(program))
-			copy(mutated, program)
-			switch command := ins.command; command {
-			case "jmp":
-				mutated[ind] = instruction{"nop", ins.argument}
-			case "nop":
-				mutated[ind] = instruction{"jmp", ins.argument}
-			default:
-				return 0
-			}
-			result, _ := runWrapper(mutated, "Part2:")
-			return result
-		}()
-		if val != 0 {
-			return val
+		mutated := make([]instruction, len(program))
+		copy(mutated, program)
+		switch command := ins.command; command {
+		case "jmp":
+			mutated[ind] = instruction{"nop", ins.argument}
+		case "nop":
+			mutated[ind] = instruction{"jmp", ins.argument}
+		default:
+			continue
 		}
+		result := runWrapper(mutated, "Part2:")
+		if result == 0 {
+			continue
+		}
+		return result
 	}
 	return -1
 }
 
-func runWrapper(program []instruction, prefix string) (int, error) {
-	var err error = nil
+func runWrapper(program []instruction, prefix string) int {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println(prefix, r)
-			err = fmt.Errorf("recovered")
 		}
 	}()
-	return run(program), err
+	return run(program)
 }
 
 func main() {
