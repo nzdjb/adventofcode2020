@@ -9,7 +9,15 @@ import (
 	"github.com/nzdjb/adventofcode2020/util"
 )
 
-func part1(start int, busses []int) {
+func part1(start int, busString string) {
+	busses := []int{}
+	for _, bus := range strings.Split(busString, ","){
+		if bus == "x" {
+			continue
+		}
+		iBus, _ := strconv.Atoi(bus)
+		busses = append(busses, iBus)
+	}
 	bestBus := 0
 	smallestWait := math.MaxInt64
 	for _, bus := range busses {
@@ -25,13 +33,5 @@ func part1(start int, busses []int) {
 func main() {
 	lines := util.ScanFileToStringSlice("./input.txt")
 	start, _ := strconv.Atoi(lines[0])
-	busses := []int{}
-	for _, bus := range strings.Split(lines[1], ","){
-		if bus == "x" {
-			continue
-		}
-		iBus, _ := strconv.Atoi(bus)
-		busses = append(busses, iBus)
-	}
-	part1(start, busses)
+	part1(start, lines[1])
 }
