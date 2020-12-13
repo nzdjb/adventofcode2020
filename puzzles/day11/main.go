@@ -145,10 +145,6 @@ func part2(room []string) {
 			break
 		}
 		prev = new
-		// for _, x := range prev {
-		// 	fmt.Println(x)
-		// }
-		// fmt.Println("Tick", ticks, countOccupied(new))
 	}
 	fmt.Println("Stable after", ticks, "ticks.")
 	fmt.Println(countOccupied(prev))
