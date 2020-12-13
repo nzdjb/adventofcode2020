@@ -6,7 +6,7 @@ import (
 	"github.com/nzdjb/adventofcode2020/util"
 )
 
-func tick(room []string) []string {
+func tick(room []string, checkFunction func([]string, int, int) int, threshold int) []string {
 	result := []string{}
 	for i := range room {
 		line := ""
@@ -15,13 +15,13 @@ func tick(room []string) []string {
 			case ".":
 				line += "."
 			case "#":
-				if checkSurroundings(room, i, j) < 4 {
+				if checkFunction(room, i, j) < threshold {
 					line += "#"
 				} else {
 					line += "L"
 				}
 			case "L":
-				if checkSurroundings(room, i, j) == 0 {
+				if checkFunction(room, i, j) == 0 {
 					line += "#"
 				} else {
 					line += "L"
@@ -37,9 +37,6 @@ func tick(room []string) []string {
 
 func checkSurroundings(room []string, i, j int) int {
 	count := 0
-	// if (i == 0 || i == len(room)-1) && (j == 0 || j == len(room[0])-1) {
-	// 	return false
-	// }
 	di, dj := genOffsets(len(room), i), genOffsets(len(room[0]), j)
 	for _, vali := range di {
 		for _, valj := range dj {
@@ -51,6 +48,42 @@ func checkSurroundings(room []string, i, j int) int {
 		}
 	}
 	return count
+}
+
+func checkSurroundings2(room []string, i, j int) int {
+	count := 0
+	seats := findVisibleSeats(room, i, j)
+	for _, seat := range seats {
+		if seat == "#" {
+			count++
+		}
+	}
+	return count
+}
+
+func findVisibleSeats(room []string, i, j int) []string {
+	directions := [][]int{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}}
+	seats := []string{}
+	for _, direction := range directions {
+		di, dj := i, j
+		for true {
+			di += direction[0]
+			dj += direction[1]
+			if !checkInsideBounds(di, dj, len(room), len(room[i])) {
+				break
+			} else if string(room[di][dj]) == "." {
+				continue
+			} else {
+				seats = append(seats, string(room[di][dj]))
+				break
+			}
+		}
+	}
+	return seats
+}
+
+func checkInsideBounds(x, y, lenx, leny int) bool {
+	return x >= 0 && y >= 0 && x < lenx && y < leny
 }
 
 func genOffsets(length, i int) []int {
@@ -87,26 +120,42 @@ func countOccupied(room []string) int {
 	return result
 }
 
-func main() {
-	lines := util.ScanFileToStringSlice("./input.txt")
-	prev := lines
+func part1(room []string) {
+	prev := room
 	ticks := 0
 	for true {
-		new := tick(prev)
+		new := tick(prev, checkSurroundings, 4)
 		ticks++
 		if checkEqual(prev, new) {
 			break
 		}
 		prev = new
-		for _, x := range prev {
-			fmt.Println(x)
-		}
-		fmt.Println("Tick", ticks, countOccupied(new))
-		// if ticks > 3 {
-		// 	break
-		// }
 	}
-	// fmt.Println(prev)
 	fmt.Println("Stable after", ticks, "ticks.")
 	fmt.Println(countOccupied(prev))
+}
+
+func part2(room []string) {
+	prev := room
+	ticks := 0
+	for true {
+		new := tick(prev, checkSurroundings2, 5)
+		ticks++
+		if checkEqual(prev, new) {
+			break
+		}
+		prev = new
+		// for _, x := range prev {
+		// 	fmt.Println(x)
+		// }
+		// fmt.Println("Tick", ticks, countOccupied(new))
+	}
+	fmt.Println("Stable after", ticks, "ticks.")
+	fmt.Println(countOccupied(prev))
+}
+
+func main() {
+	lines := util.ScanFileToStringSlice("./input.txt")
+	part1(lines)
+	part2(lines)
 }
