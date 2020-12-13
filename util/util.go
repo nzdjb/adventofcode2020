@@ -26,3 +26,11 @@ func ScanFileToStringSlice(filename string) []string {
 
 	return lines
 }
+
+// Abs Absolute function for integers
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
