@@ -16,23 +16,8 @@ type field struct {
 	bmax int
 }
 
-func part1(lines []string) {
-	fieldReg := regexp.MustCompile("^([a-z ]+): ([0-9]+)-([0-9]+) or ([0-9]+)-([0-9]+)$")
-	fields := map[string]field{}
-	var i int
-	for i = 0; lines[i] != ""; i++ {
-		match := fieldReg.FindStringSubmatch(lines[i])
-		amin, _ := strconv.Atoi(match[2])
-		amax, _ := strconv.Atoi(match[3])
-		bmin, _ := strconv.Atoi(match[4])
-		bmax, _ := strconv.Atoi(match[5])
-		fields[match[1]] = field{amin, amax, bmin, bmax}
-	}
-	
-	i += 2
-	// myTicket := strings.Split(lines[i], ",")
-
-	invalids := []int{}
+func part1(fields map[string]field, lines []string, i int) {
+  invalids := []int{}
 	tickets := [][]int{}
 	for i += 2; i < len(lines); i++ {
 		if lines[i] == "" {
@@ -64,7 +49,27 @@ func part1(lines []string) {
 	fmt.Println(sum)
 }
 
+func part2(fields map[string]field, lines []string, i int, myTicket []string) {
+	fmt.Println(fields, lines, i, myTicket)
+}
+
 func main() {
 	lines := util.ScanFileToStringSlice("./input.txt")
-	part1(lines)
+	fieldReg := regexp.MustCompile("^([a-z ]+): ([0-9]+)-([0-9]+) or ([0-9]+)-([0-9]+)$")
+	fields := map[string]field{}
+	var i int
+	for i = 0; lines[i] != ""; i++ {
+		match := fieldReg.FindStringSubmatch(lines[i])
+		amin, _ := strconv.Atoi(match[2])
+		amax, _ := strconv.Atoi(match[3])
+		bmin, _ := strconv.Atoi(match[4])
+		bmax, _ := strconv.Atoi(match[5])
+		fields[match[1]] = field{amin, amax, bmin, bmax}
+	}
+
+	i += 2
+	myTicket := strings.Split(lines[i], ",")
+
+	part1(fields, lines, i)
+	part2(fields, lines, i, myTicket)
 }
